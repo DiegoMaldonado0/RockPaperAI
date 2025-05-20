@@ -4,7 +4,7 @@ import Top from "./components/top";
 import Card from "./components/card";
 import Button from "./components/button";
 import Timer from "./components/timer";
-import User from "./components/user";
+import CameraFeed from "./components/CameraFeed";
 
 function App() {
   const [isClicked, setIsClicked] = useState(false);
@@ -104,9 +104,13 @@ function App() {
         </section>
         <section
           id="userCamera"
-          className="col-start-2 row-start-2 flex justify-center mb-1"
+          className="col-start-2 row-start-2 flex justify-center items-center w-full h-full"
         >
-          <User></User>
+          <CameraFeed
+            onHandDetected={(isHandDetected) => {
+              console.log("Hand detected:", isHandDetected); // Log if a hand is detected
+            }}
+          />
         </section>
       </main>
     </div>
