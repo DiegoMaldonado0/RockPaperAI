@@ -23,6 +23,7 @@ export default function App() {
   const [isHidden, setIsHidden] = useState(false);
   const videoRef = useRef(null);
   const [prediction, setPrediction] = useState("...");
+  const [Choice, setChoice] = useState(false);
   const [aiChoice, setAiChoice] = useState("...");
   const [result, setResult] = useState("Esperando jugada...");
   const [countdown, setCountdown] = useState(null);
@@ -250,7 +251,7 @@ export default function App() {
   return (
     <div
       id="Body"
-      className="w-full h-dvh border-4 inset-shadow-sm grid grid-cols-3 grid-rows-[0.5fr_4.5fr]"
+      className="w-full h-dvh border-4 inset-shadow-sm grid grid-cols-3 grid-rows-[0.5fr_4.5fr] overflow-hidden"
     >
       <header
         id="Header"
@@ -259,7 +260,7 @@ export default function App() {
         <Top></Top>
       </header>
       <main
-        className="col-span-3 row-start-2 overflow-auto 
+        className="col-span-3 row-start-2 overflow-hidden 
       grid grid-flow-col grid-cols-3 grid-rows-3 z-10 mt-4"
       >
         <section
@@ -267,6 +268,28 @@ export default function App() {
           className="row-start-1 row-end-4 col-start-1
           grid grid-flow-col grid-cols-1 grid-rows-3"
         >
+          <div
+            id="userTag"
+            className="col-start-1 row-start-1 flex items-start justify-center text-2xl"
+          >
+            <h2
+              className=" text-neutral-300 font-bold
+              transition-opacity duration-1000 ease-in-out z-0"
+            >
+              YOU
+            </h2>
+          </div>
+          <div
+            id="userScore"
+            className="col-start-1 row-start-1 row-end-4 flex items-center justify-center"
+          >
+            <h2
+              className=" text-neutral-300 font-bold opacity-30
+              transition-opacity duration-1000 ease-in-out z-0 text-[400px]"
+            >
+              {userScore}
+            </h2>
+          </div>
           <article
             id="cardRock"
             className="col-start-1 row-start-1 flex justify-center items-center -rotate-4"
@@ -284,11 +307,6 @@ export default function App() {
             className="col-start-1 row-start-3 flex justify-center items-center -rotate-5"
           >
             <Card type="Scissors" animations={3}></Card>
-          </article>
-          <article className="col-start-1 row-end-4 flex justify-center items-end relative">
-            <p>
-              <strong>Tu</strong>
-            </p>
           </article>
         </section>
         <section className="col-start-2 row-end-3 min-h-30">
@@ -309,18 +327,24 @@ export default function App() {
                 className={`text-neutral-300 font-bold flex justify-center items-end h-full 
             realtive transition-opacity duration-1000 ease-in-out z-0 text-nowrap`}
               >
-                {handDetected
-                  ? `${currentHandSign || prediction} ${
-                      currentHandSign ? getHandSignEmoji(currentHandSign) : ""
-                    }`
-                  : "Muestra tu mano al finalizar el contador"}
+                {!Choice
+                  ? "Muestra tu mano al finalizar el contador"
+                  : `${
+                      handDetected
+                        ? `${currentHandSign || prediction}`
+                        : "No Selection Detected"
+                    }`}
+
+                {/* {handDetected
+                  ? `${currentHandSign || prediction} ${setChoice(true)}`
+                  : "Muestra tu mano al finalizar el contador"} */}
               </p>
             </div>
             <section
               id="timer"
               className="col-start-2 row-start-3 flex justify-center items-center z-0"
             >
-              <Timer></Timer>
+              <Timer setChoice={setChoice}></Timer>
             </section>
           </>
         ) : (
@@ -342,17 +366,28 @@ export default function App() {
           grid grid-flow-col grid-cols-1 grid-rows-3 
           relative right-2"
         >
-          <article
-            id="puntuacionAi"
-            className="col-start-1 row-start-1 flex justify-center items-start"
+          <div
+            id="aiTag"
+            className="col-start-1 row-start-1 flex items-start justify-center text-2xl"
           >
             <h2
-              className="text-4xl text-neutral-300 font-bold 
-              transition-opacity duration-1000 ease-in-out"
+              className=" text-neutral-300 font-bold
+              transition-opacity duration-1000 ease-in-out z-0"
+            >
+              AI
+            </h2>
+          </div>
+          <div
+            id="aiScore"
+            className="col-start-1 row-start-1 row-end-4 flex items-center justify-center"
+          >
+            <h2
+              className=" text-neutral-300 font-bold opacity-30
+              transition-opacity duration-1000 ease-in-out z-0 text-[400px]"
             >
               {aiScore}
             </h2>
-          </article>
+          </div>
           <article
             id="cardRock"
             className="col-start-1 row-start-1 flex justify-center items-center rotate-4"
@@ -371,18 +406,10 @@ export default function App() {
           >
             <Card type="Scissors" animations={2}></Card>
           </article>
-          <article className="col-start-1 row-end-4 flex justify-center items-end relative">
-            <p>
-              <strong>IA</strong>
-            </p>
-          </article>
         </section>
       </main>
 
-      <h3>
-        🧍 Tú: {userScore} | 🤖 IA: {aiScore}
-      </h3>
-      {!gameOver && (
+      {/* {!gameOver && (
         <button
           onClick={startRound}
           disabled={isPlaying}
@@ -405,7 +432,7 @@ export default function App() {
         >
           Reiniciar juego
         </button>
-      )}
+      )} */}
     </div>
   );
 }

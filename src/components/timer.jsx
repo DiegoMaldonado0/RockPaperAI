@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function Timer() {
+export default function Timer({ setChoice }) {
   const [count, setCount] = useState(3);
   const [isShow, setIsShow] = useState(true);
   const [isHidden, setIsHidden] = useState(false);
@@ -13,7 +13,7 @@ export default function Timer() {
   }, []);
 
   useEffect(() => {
-    if (count > 0) {
+    if (count > -1) {
       const countTimer = setTimeout(() => setCount(count - 1), 1250);
       return () => {
         clearTimeout(countTimer);
@@ -37,6 +37,7 @@ export default function Timer() {
         ${isHidden && "hidden"}`}
     >
       {count > 0 ? count : "GO!"}
+      {count === -1 && setChoice(true)}
     </div>
   );
 }

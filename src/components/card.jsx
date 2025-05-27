@@ -18,7 +18,7 @@ export default function Card({ type, animations }) {
   return (
     <article
       className={`border-2 w-lvw max-w-15 h-lvh max-h-15 flex items-center justify-center relative z-10 
-    border-b-3 border-r-4 rounded-md shadow-2xl ${animation}
+    border-b-3 border-r-4 rounded-md shadow-2xl bg-white ${animation}
     `}
     >
       <svg
