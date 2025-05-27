@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --font-roboto: "Roboto Flex", system-ui, sans-cerif;
+
+  --animate-wiggle1: wiggle1 7s ease-in-out infinite;
+  @keyframes wiggle1 {
+    0%,
+    100% {
+      transform: translateY(-2px);
+    }
+    75% {
+      transform: translateY(2px);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+    25% {
+      transform: translateY(0px);
+    }
+  }
+
+  --animate-wiggle2: wiggle2 7s ease-in-out infinite;
+  @keyframes wiggle2 {
+    0%,
+    100% {
+      transform: translateY(1px);
+    }
+    75% {
+      transform: translateY(-1px);
+    }
+    50% {
+      transform: translateY(3px);
+    }
+    25% {
+      transform: translateY(0px);
+    }
+  }
+
+  --animate-wiggle3: wiggle3 10s ease-in-out infinite;
+  @keyframes wiggle3 {
+    0%,
+    100% {
+      transform: translateY(-2px);
+    }
+    75% {
+      transform: translateY(2px);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+    25% {
+      transform: translateY(0px);
+    }
+  }
+}

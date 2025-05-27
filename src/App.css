@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Roboto";
+  src: url("src/assets/RobotoFlex.woff2") format("woff2");
+  font-style: oblique 0deg 0deg;
+  font-weight: 100 1000;
+  font-stretch: 25% 151%;
+  font-variation-settings: "GRAD" 150;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "RobotoTitle";
+  src: url("src/assets/RobotoFlex.woff2") format("woff2");
+  font-style: oblique -10deg;
+  font-weight: 1000;
+  font-stretch: 25%;
+  font-display: swap;
+}
+
+@theme {
+  /* Modificamos las fonts por defecto de tailwind */
+  --font-sans: "Roboto", system-ui, sans-cerif;
+  --font-cerif: "Roboto", system-ui, sans-cerif;
+  --font-mono: "Roboto", system-ui, sans-cerif;
+  --font-roboto: "RobotoTitle", system-ui, sans-cerif;
+}
