@@ -21,10 +21,8 @@ export default function Timer({ setChoice }) {
     }
 
     if (count === -1) {
-      // Use setTimeout to avoid setState during render
-      setTimeout(() => {
-        setChoice(true);
-      }, 0);
+      // Llamar setChoice inmediatamente cuando el contador llega a -1
+      setChoice(true);
       
       setTimeout(() => {
         setIsShow(false);

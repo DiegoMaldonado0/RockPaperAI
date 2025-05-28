@@ -21,6 +21,7 @@ export default function App() {
   const [userChoice, setUserChoice] = useState(null);
   const [aiChoice, setAiChoice] = useState(null);
   const [result, setResult] = useState("Presiona START para comenzar");
+  const [timerKey, setTimerKey] = useState(0); // Para forzar re-render del timer
   
   // Hand Detection States
   const videoRef = useRef(null);
@@ -49,6 +50,8 @@ export default function App() {
     if (!handDetected || !currentHandSign) {
       setResult("No se detectó una mano válida 🙁");
       setIsGameActive(false);
+      setIsHidden(false);
+      setChoice(false);
       return;
     }
 
@@ -67,6 +70,10 @@ export default function App() {
       if (newUserScore === 5) {
         setGameOver(true);
         setResult("¡GANASTE EL JUEGO! 🏆");
+        setIsGameActive(false);
+        setIsHidden(false);
+        setChoice(false);
+        return;
       }
     } else if (roundResult.includes("Perdiste")) {
       const newAiScore = aiScore + 1;
@@ -74,24 +81,34 @@ export default function App() {
       if (newAiScore === 5) {
         setGameOver(true);
         setResult("PERDISTE EL JUEGO 😢");
+        setIsGameActive(false);
+        setIsHidden(false);
+        setChoice(false);
+        return;
       }
     }
 
     setIsGameActive(false);
+    
+    // Preparar para la siguiente ronda después de 3 segundos
+    setTimeout(() => {
+      if (!gameOver) {
+        setChoice(false);
+        setIsHidden(false);
+        setUserChoice(null);
+        setAiChoice(null);
+        setResult("Presiona START para la siguiente ronda");
+      }
+    }, 3000);
   };
 
   const startGame = () => {
     if (gameOver) return;
-    
-    if (!handDetected) {
-      setResult("Muestra tu mano a la cámara antes de comenzar 🙁");
-      return;
-    }
-
     setIsGameActive(true);
     setUserChoice(null);
     setAiChoice(null);
     setResult("Preparado...");
+    setTimerKey(prev => prev + 1); // Forzar re-render del timer
   };
 
   const resetGame = () => {
@@ -106,15 +123,15 @@ export default function App() {
     setIsClicked(false);
     setIsHidden(false);
     setGestureHistory([]);
+    setTimerKey(prev => prev + 1);
   };
 
-  // Handle timer completion
+  // Handle timer completion - SIMPLIFICADO
   useEffect(() => {
     if (Choice && isGameActive) {
       playRound();
-      setChoice(false);
     }
-  }, [Choice, isGameActive, handDetected, currentHandSign, userScore, aiScore]);
+  }, [Choice]); // Solo depende de Choice
 
   // Hand Detection Functions (keeping the existing robust detection logic)
   const analyzeFingers = (landmarks, isRightHand) => {
@@ -413,7 +430,7 @@ export default function App() {
               id="timer"
               className="col-start-2 row-start-3 flex justify-center items-center z-0"
             >
-              <Timer setChoice={setChoice}></Timer>
+              <Timer key={timerKey} setChoice={setChoice}></Timer>
             </section>
           </>
         ) : (
@@ -458,10 +475,10 @@ export default function App() {
       </main>
 
       {/* Game Result Display */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-80 text-white px-6 py-3 rounded-lg text-center">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-80 text-white px-10 py-10 rounded-lg text-center">
         <div className="text-lg font-bold">{result}</div>
         {(userChoice && aiChoice) && (
-          <div className="text-sm mt-1">
+          <div className="text-lg mt-1">
             Tú: {getHandSignEmoji(userChoice)} vs IA: {getHandSignEmoji(aiChoice)}
           </div>
         )}
@@ -476,6 +493,7 @@ export default function App() {
           <div>Confidence: {(confidence * 100).toFixed(1)}%</div>
           <div>Game Active: {isGameActive ? 'Yes' : 'No'}</div>
           <div>Score: {userScore} - {aiScore}</div>
+          <div>Choice: {Choice ? 'True' : 'False'}</div>
         </div>
       )}
     </div>
