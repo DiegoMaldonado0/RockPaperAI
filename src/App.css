@@ -25,4 +25,5 @@
   --font-cerif: "Roboto", system-ui, sans-cerif;
   --font-mono: "Roboto", system-ui, sans-cerif;
   --font-roboto: "RobotoTitle", system-ui, sans-cerif;
+  --breakpoint-xs: 431px;
 }

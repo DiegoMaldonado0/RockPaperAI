@@ -2,8 +2,8 @@ export default function Top() {
   return (
     <>
       <nav
-        className="border-3 shadow-md w-9/12 h-7 max-w-200 
-        relative grid grid-flow-row grid-cols-3 grid-rows-1 items-center"
+        className="border-3 shadow-md w-9/12 h-10 max-w-200 
+        relative grid grid-flow-row grid-cols-3 grid-rows-1 items-center mb-0"
       >
         <a
           href="https://www.genpact.com/"
@@ -12,10 +12,10 @@ export default function Top() {
           aria-label="Link description"
           className="flex items-center 
             absolute 
-            top-0 left-5"
+            top-1 left-5"
         >
           <svg
-            className="w-7 h-7 
+            className="w-8 h-8 
               hover:scale-110 hover:filter hover:drop-shadow-lg 
               transition-transform duration-250"
             id="logo"

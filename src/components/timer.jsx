@@ -14,7 +14,7 @@ export default function Timer({ setChoice }) {
 
   useEffect(() => {
     if (count > -1) {
-      const countTimer = setTimeout(() => setCount(count - 1), 1250);
+      const countTimer = setTimeout(() => setCount(count - 1), 500);
       return () => {
         clearTimeout(countTimer);
       };
@@ -23,7 +23,7 @@ export default function Timer({ setChoice }) {
     if (count === -1) {
       // Llamar setChoice inmediatamente cuando el contador llega a -1
       setChoice(true);
-      
+
       setTimeout(() => {
         setIsShow(false);
       }, 1000);
@@ -38,7 +38,7 @@ export default function Timer({ setChoice }) {
     <div
       className={`text-8xl text-neutral-200 font-bold flex justify-center items-center h-full relative 
         transition-opacity duration-1000 ease-in-out z-0
-        ${!isShow && "opacity-0"}
+        ${!isShow ? "opacity-0" : "opacity-100"}
         ${isHidden && "hidden"}`}
     >
       {count > 0 ? count : "GO!"}

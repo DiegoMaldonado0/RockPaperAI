@@ -12,8 +12,8 @@ export default function Button({ type, isClicked, isHidden, onClick }) {
         tabIndex={0}
         role="button"
         className={`border-2 border-b-3 border-r-5 rounded-2xl w-full max-w-30 bg-white
-          active:border-2 ${
-            isClicked && "opacity-0 transition-opacity duration-1000"
+          active:border-2 transition-opacity duration-1000 ${
+            isClicked ? "opacity-0" : "opacity-100"
           }
             ${isHidden && "hidden"}
           }`}
