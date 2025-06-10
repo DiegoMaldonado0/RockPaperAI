@@ -35,21 +35,20 @@ export default function App() {
 
   // Game Logic
   const getWinner = (user, ai) => {
-    if (user === ai) return "Empate 🤝";
+    if (user === ai) return "TIE";
     if (
       (user === "rock" && ai === "scissors") ||
       (user === "paper" && ai === "rock") ||
       (user === "scissors" && ai === "paper")
     )
-      return "Ganaste 🎉";
-    return "Perdiste 😢";
+      return "WIN";
+    return "LOSE";
   };
 
   const playRound = () => {
     if (!handDetected || !currentHandSign) {
-      setResult("No se detectó una mano válida 🙁");
+      setResult("NO");
       setIsGameActive(false);
-      setIsHidden(false);
       setChoice(false);
       setIsHidden(false);
       setIsClicked(false);
@@ -65,27 +64,25 @@ export default function App() {
     setResult(roundResult);
 
     // Update scores
-    if (roundResult.includes("Ganaste")) {
+    if (roundResult.includes("WIN")) {
       const newUserScore = userScore + 1;
       setUserScore(newUserScore);
-      if (newUserScore === 5) {
+      if (newUserScore >= 5) {
+        setResult("WIN");
         setGameOver(true);
-        setResult("¡GANASTE EL JUEGO! 🏆");
         setIsGameActive(false);
-        setIsHidden(false);
         setChoice(false);
         setIsHidden(false);
         setIsClicked(false);
         return;
       }
-    } else if (roundResult.includes("Perdiste")) {
+    } else if (roundResult.includes("LOSE")) {
       const newAiScore = aiScore + 1;
       setAiScore(newAiScore);
-      if (newAiScore === 5) {
+      if (newAiScore >= 5) {
+        setResult("LOSE");
         setGameOver(true);
-        setResult("PERDISTE EL JUEGO 😢");
         setIsGameActive(false);
-        setIsHidden(false);
         setChoice(false);
         setIsHidden(false);
         setIsClicked(false);
@@ -104,7 +101,6 @@ export default function App() {
         setAiChoice(null);
         setIsHidden(false);
         setIsClicked(false);
-        setResult("Presiona START para la siguiente ronda");
       }
     }, 3000);
   };
@@ -357,6 +353,7 @@ export default function App() {
     }, 100);
   };
 
+  console.log(aiChoice);
   return (
     <div
       id="Body"
@@ -383,65 +380,127 @@ export default function App() {
               {userScore}
             </h2>
           </div>
-          <article className="col-start-1 row-start-1 flex justify-center items-center xs:max-md:items-end -rotate-4">
+          <article
+            className={`col-start-1 row-start-1 flex justify-center items-center transition-all duration-1000 ease-in-out xs:max-md:items-end -rotate-4 ${
+              userChoice === "rock" && "scale-150"
+            }`}
+          >
             <Card type="Rock" animations={1}></Card>
           </article>
-          <article className="col-start-1 row-start-2 flex justify-center items-center rotate-2">
+          <article
+            className={`col-start-1 row-start-2 flex justify-center items-center transition-all duration-1000 ease-in-out rotate-2 ${
+              userChoice === "paper" && "scale-150"
+            }`}
+          >
             <Card type="Paper" animations={2}></Card>
           </article>
-          <article className="col-start-1 row-start-3 flex justify-center items-center xs:max-md:items-start -rotate-5">
+          <article
+            className={`col-start-1 row-start-3 flex justify-center items-center transition-all duration-1000 ease-in-out xs:max-md:items-start -rotate-5 ${
+              userChoice === "scissors" && "scale-150"
+            }`}
+          >
             <Card type="Scissors" animations={3}></Card>
           </article>
         </section>
-
-        {/* CENTER Section - Video and Controls */}
-        <section className="col-start-2 row-end-3 min-h-30 relative z-10 bg-white">
+        <section
+          id="HandDetection"
+          className="col-start-2 row-start-1 row-end-2 flex justify-center items-start"
+        >
+          {handDetected && currentHandSign && (
+            <div className="text-neutral-200 px-3 py-2 rounded-lg w-full flex items-center justify-center font-bold gap-2">
+              <div className="text-xl">
+                <div>{currentHandSign.toUpperCase()}</div>
+              </div>
+            </div>
+          )}
+          {!handDetected && (
+            <div className="bg-opacity-70 text-neutral-200 text-center px-3 py-2 rounded-lg w-full font-bold">
+              <div className="text-xl">No hand detected</div>
+            </div>
+          )}
+        </section>
+        <section
+          id="Video"
+          className="col-start-2 row-end-3 min-h-30 relative z-10 bg-white"
+        >
           <video
             ref={videoRef}
-            className={`m-auto block border-4 w-full h-full object-cover`}
+            className={`m-auto block border-4 w-full h-full object-cover insent-shadow-sm`}
             style={{
               display: "block",
               margin: "auto",
               transform: "scaleX(-1)",
             }}
           />
-
-          {/* Hand detection overlay */}
-          {handDetected && currentHandSign && (
-            <div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white px-3 py-2 rounded-lg w-20 h-10">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px]">
-                  {getHandSignEmoji(currentHandSign)}
-                </span>
-                <div className="text-sm">
-                  <div>{currentHandSign.toUpperCase()}</div>
-                  <div>{handedness} Hand</div>
-                  <div>Conf: {(confidence * 100).toFixed(0)}%</div>
-                </div>
-              </div>
-            </div>
-          )}
-          {!handDetected && (
-            <div className="absolute top-2 left-2 bg-red-600 bg-opacity-70 text-white px-3 py-2 rounded-lg w-20 h-10">
-              <div className="text-[10px]">No hand detected</div>
-            </div>
-          )}
         </section>
-
-        {/* Game Status and Timer */}
+        {result === "TIE" && (
+          <section
+            id="result"
+            className="relative col-start-2 row-start-2 z-20 font-bold text-neutral-100 opacity-70 flex items-end justify-center"
+          >
+            <p className="text-7xl xl:text-9xl">TIE</p>
+          </section>
+        )}
+        {result === "NO" && (
+          <section
+            id="result"
+            className="relative col-start-2 row-start-2 z-20 font-bold text-neutral-100 opacity-70 flex items-start justify-center"
+          >
+            <p className="text-5xl">NO HAND</p>
+          </section>
+        )}
+        {result === "NO" && (
+          <section
+            id="result"
+            className="relative col-start-2 row-start-2 z-20 font-bold text-neutral-100 opacity-70 flex items-end justify-center"
+          >
+            <p className="text-5xl">DETECTED</p>
+          </section>
+        )}
+        {result === "WIN" && (
+          <section
+            id="result"
+            className="relative col-start-2 row-start-2 z-20 font-bold text-neutral-100 opacity-70 flex items-start justify-center"
+          >
+            <p className="text-6xl xl:text-8xl">YOU</p>
+          </section>
+        )}
+        {result === "WIN" && (
+          <section
+            id="result"
+            className="relative col-start-2 row-start-2 z-20 font-bold text-neutral-100 opacity-70 flex items-end justify-center"
+          >
+            <p className="text-6xl xl:text-9xl">WIN</p>
+          </section>
+        )}
+        {result === "LOSE" && (
+          <section
+            id="result"
+            className="relative col-start-2 row-start-2 z-20 font-bold text-neutral-100 opacity-70 flex items-start justify-center"
+          >
+            <p className="text-6xl xl:text-8xl">YOU</p>
+          </section>
+        )}
+        {result === "LOSE" && (
+          <section
+            id="result"
+            className="relative col-start-2 row-start-2 z-20 font-bold text-neutral-100 opacity-70 flex items-end justify-center"
+          >
+            <p className="text-5xl xl:text-9xl">LOSE</p>
+          </section>
+        )}
         {isHidden ? (
           <>
-            <div id="indicador" className="relative col-start-2 row-start-1">
-              <p className="text-neutral-300 font-bold flex justify-center items-end h-full relative transition-opacity duration-1000 ease-in-out z-0 text-nowrap">
+            <section
+              id="indicador"
+              className="relative col-start-2 row-start-1"
+            >
+              <div className="text-neutral-400 font-bold flex justify-center items-end h-full relative transition-opacity duration-1000 ease-in-out z-0 text-nowrap">
                 {!Choice
                   ? "Muestra tu mano al finalizar el contador"
-                  : userChoice && aiChoice
-                  ? `Tu elección: ${userChoice} ${getHandSignEmoji(
-                      userChoice
-                    )} vs IA: ${aiChoice} ${getHandSignEmoji(aiChoice)}`
-                  : "Procesando..."}
-              </p>
-            </div>
+                  : userChoice && aiChoice && `${userChoice} vs ${aiChoice}`}
+              </div>
+            </section>
             <section
               id="timer"
               className="col-start-2 row-start-2 flex justify-center items-center z-20"
@@ -478,20 +537,32 @@ export default function App() {
               {aiScore}
             </h2>
           </div>
-          <article className="col-start-1 row-start-1 flex justify-center items-center xs:max-md:items-end rotate-4 h-full w-full">
+          <article
+            className={`col-start-1 row-start-1 flex justify-center items-center transition-all duration-1000 ease-in-out xs:max-md:items-end rotate-4 h-full w-full ${
+              aiChoice === "rock" && "scale-150"
+            }`}
+          >
             <Card type="Rock" animations={2}></Card>
           </article>
-          <article className="col-start-1 row-start-2 flex justify-center items-center -rotate-2">
+          <article
+            className={`col-start-1 row-start-2 flex justify-center items-center transition-all duration-1000 ease-in-out -rotate-2 ${
+              aiChoice === "paper" && "scale-150"
+            }`}
+          >
             <Card type="Paper" animations={1}></Card>
           </article>
-          <article className="col-start-1 row-start-3 flex justify-center items-center xs:max-md:items-start rotate-5">
+          <article
+            className={`col-start-1 row-start-3 flex justify-center items-center transition-all duration-1000 ease-in-out xs:max-md:items-start rotate-5 ${
+              aiChoice === "scissors" && "scale-150"
+            }`}
+          >
             <Card type="Scissors" animations={2}></Card>
           </article>
         </section>
       </main>
 
       {/* Game Result Display */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-80 text-white px-10 py-10 rounded-lg text-center">
+      {/* <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-80 text-white px-10 py-10 rounded-lg text-center">
         <div className="text-lg font-bold">{result}</div>
         {userChoice && aiChoice && (
           <div className="text-lg mt-1">
@@ -499,10 +570,10 @@ export default function App() {
             {getHandSignEmoji(aiChoice)}
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* Debug panel for development */}
-      {process.env.NODE_ENV === "development" && (
+      {/* {process.env.NODE_ENV === "development" && (
         <div className="fixed bottom-4 right-4 bg-black bg-opacity-80 text-white p-3 rounded-lg text-xs">
           <div>Hand: {handDetected ? "Detected" : "Not detected"}</div>
           <div>Current: {currentHandSign || "None"}</div>
@@ -514,7 +585,7 @@ export default function App() {
           </div>
           <div>Choice: {Choice ? "True" : "False"}</div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
