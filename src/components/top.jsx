@@ -3,7 +3,7 @@ export default function Top() {
     <>
       <nav
         className="border-3 shadow-md w-9/12 h-10 max-w-200 
-        relative grid grid-flow-row grid-cols-3 grid-rows-1 items-center mb-0"
+        relative grid grid-flow-row grid-cols-3 grid-rows-1 items-center mb-0 bg-white"
       >
         <a
           href="https://www.genpact.com/"

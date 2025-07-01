@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
   <!-- ROCK -->
   <symbol
-    id="Rock"
+    id="rock"
     viewBox="0 0 512 512"
     stroke-width="1.5"
     stroke="currentColor"
@@ -14,7 +14,7 @@
   </symbol>
   <!-- SISSORS -->
   <symbol
-    id="Scissors"
+    id="scissors"
     viewBox="0 0 24 24"
     stroke-width="1.5"
     stroke="currentColor"
@@ -28,7 +28,7 @@
     <!--PAPPER -->
   </symbol>
   <symbol
-    id="Paper"
+    id="paper"
     viewBox="0 0 24 24"
     stroke-width="1.5"
     stroke="currentColor"
